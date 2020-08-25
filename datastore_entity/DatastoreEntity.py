@@ -278,7 +278,7 @@ class DatastoreEntity():
         return True
     
 
-    def generate_datastore_key(self,path):
+    def generate_key(self,path):
         """
         :param path: a list with key path in the format ['kind','id',...]
         :type path: list

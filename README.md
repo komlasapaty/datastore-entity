@@ -5,14 +5,13 @@ DatastoreEntity package provides a simple ORM-like(think SQL-Alchemy) interface 
 Google Cloud Firestore in Datastore mode is a NoSQL document database built for automatic scaling, high performance, and ease of application development. Datastore
 
 DatastoreEntity package allows you to represent your datastore entities using Python classes.
-You can then use familiar patterns with popular packages like WTForms(eg. form.populate_obj(model)) or Flask-Login(ie User class), to create,
-read, update and delete entities.
+You can then use familiar patterns with popular packages like WTForms(eg. ```form.populate_obj(model)```) or Flask-Login(ie User model for authentication), to create, read, update and delete entities.
 
-### Documentation Link
+## Documentation Link
 Coming soon...
 
-### Setup
-As always, to connect to a GCP service from your local machine, you need to set up a service account key.
+## Setup
+As always, to connect to a Google Cloud Platform service from your local machine, you need to set up a service account key.
 Use the environment variable **GOOGLE_APPLICATION_CREDENTIALS** to point to the JSON file
 ```
 export GOOGLE_APPLICATION_CREDENTIALS="/code/auth/datastore-service-account.json"
@@ -20,7 +19,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="/code/auth/datastore-service-account.json
 See below for another method of connecting by manually specifying the location of the service account JSON file.
 
 
-### Installation
+## Installation
 Install the package using pip
 ```
 pip install datastore-entity
@@ -54,31 +53,50 @@ class User(DatastoreEntity):
 
 ### Connecting To Datastore
 ```python
-user = User()  #this connects to the default namespace. after connecting, you can retrieve an entity as an object or populate attributes and save the entity
+user = User()  
+#this connects to the default namespace. 
+# After connecting, you can retrieve an entity as an object or populate attributes and save the entity
 
-user = User('custom')   #connects to the 'custom' datastore namespace
-user = User(service_account_json_path='path/to/service/account.json') #connect using a service account JSON key (as opposed to using the enironment variable)
+#connects to the 'custom' datastore namespace
+user = User('custom')  
 
-user.username = 'komla' #set attribute 
-user.save()  #save or update entity to datastore
+#connect using a service account JSON key (as opposed to using 
+# the environment variable GOOGLE_APPLICATION_CREDENTIALS)
+user = User(service_account_json_path='path/to/service/account.json') 
+```
 
-user.save(id='komla') #save entity with custom ID
+#### Persist an entity
+```python
+#set object attribute
+user.username = 'komla'
+#save or update entity to datastore
+user.save()
+
+#save an entity with custom ID
+user.save(id='komla')
+```
 
 ### Generate datastore key ###
+```python
+#Create a key by specifing a parent and descendant(s)
 key_path = ['Client','for','Department','sales']
-ancestor_key = user.generate_datastore_key(key_path)
+ancestor_key = user.generate_key(key_path)
 
-user.save(parent_or_ancestore=ancestor_key) #then save an entity as a descendant of a parent entity
+#then save an entity as a descendant of a parent entity
+user.save(parent_or_ancestor=ancestor_key) 
+```
 
-#Retrieve an entity as an object
-user = User().get_obj('username','komla') #specify property name and value. See the Tips sections below!
+### Retrieve an entity as an object
+```python
+#specify property name and value. See the Tips sections below!
+user = User().get_obj('username','komla') 
 
-#Retrieve entity key
-user.key             #the entity's datastore key
+#the 'key' attribute is the entity's datastore key
+user.key             
 
 ```
 
-## Tips ##
+## Tips
 #### Using A Base Model
 You can use a class to represent common properties/columns, then inherit it for your models
 ```python
