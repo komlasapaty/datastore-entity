@@ -26,7 +26,7 @@ pip install datastore-entity
 ```
 
 # Usage Examples
-Some useful examples
+Some useful examples after installation
 ### Create A Model Class 
 ```python
 from datastore_entity import DatastoreEntity, DSEntityValue
@@ -65,7 +65,7 @@ user = User('custom')
 user = User(service_account_json_path='path/to/service/account.json') 
 ```
 
-#### Persist an entity
+### Persist an entity
 ```python
 #set object attribute
 user.username = 'komla'
