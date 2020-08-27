@@ -38,7 +38,7 @@ class User(DatastoreEntity):
     active = DSEntityValue(1)
     date_created = DSEntityValue(datetime.datetime.utcnow()) #from datetime module
 
-    #specify the entity kind name. This is REQUIRED
+    #specify the name of the entity kind. This is REQUIRED
     __kind__ = "User"
 
     #optionally add properties to exclude from datastore indexes here
@@ -121,7 +121,7 @@ def get(self, value):
 ```
 Then you can grab your entity object with ```user = User().get('komla')```
 
-## Limitations ##
+## Notes ##
 There might be operations you want to perform that are not available via the interface provided.
 To get a direct access to Datastore connection clients, use the ```get_client()``` method.
 ```python
