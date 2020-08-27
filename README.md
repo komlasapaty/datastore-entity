@@ -33,16 +33,16 @@ from datastore_entity import DatastoreEntity, DSEntityValue
 
 class User(DatastoreEntity):
 
-    username = DSEntityValue(None)  #specify a default value or provide no argument to imply 'None' value
-    password = DSEntityValue()      #default of of 'None'
-    active = DSEntityValue(1)       #default value of 1
+    username = DSEntityValue(None)  # specify a default value of 'None'
+    password = DSEntityValue()      # or provide no argument to imply 'None'
+    active = DSEntityValue(1)       # default value of 1
     date_created = DSEntityValue(datetime.datetime.utcnow())
 
     #specify the name of the entity kind. This is REQUIRED. Raises ValueError otherwise
     __kind__ = "User"
 
-    #optionally add properties to exclude from datastore indexes here
-    __exclude_from_index__ = []
+    #optionally add properties to exclude from datastore indexes 
+    __exclude_from_index__ = ['password']
 
     #Call the super class
     def __init__(self,namespace,service_account_json_path):
@@ -53,46 +53,52 @@ class User(DatastoreEntity):
 
 ### Connecting To Datastore
 ```python
+# connect to the default namespace. 
 user = User()  
-#this connects to the default namespace. 
 # After connecting, you can retrieve an entity as an object or populate attributes and save the entity
 
-#connects to the 'custom' datastore namespace
+#connect to the 'custom' datastore namespace
 user = User('custom')  
 
-#connect using a service account JSON key (as opposed to using 
+# connect using a service account JSON key (as opposed to using 
 # the environment variable GOOGLE_APPLICATION_CREDENTIALS)
 user = User(service_account_json_path='path/to/service/account.json') 
 ```
 
 ### Persist an entity
 ```python
-#set object attribute
+# set object attribute
 user.username = 'komla'
-#save or update entity to datastore
+# save or update entity to datastore
 user.save()
 
-#save an entity with custom ID
+# save an entity with custom ID/Name
 user.save(id='komla')
 ```
 
 ### Generate datastore key ###
 ```python
-#Create a key by specifing a parent and descendant(s)
-key_path = ['Client','for','Department','sales']
+# Create a key by specifing a parent and descendant(s)
+key_path = ['Client','foo','Department','bar']
 ancestor_key = user.generate_key(key_path)
 
-#then save an entity as a descendant of a parent entity
+# then save an entity as a descendant of a parent entity
 user.save(parent_or_ancestor=ancestor_key) 
 ```
 
 ### Retrieve an entity as an object
 ```python
-#specify property name and value. See the Tips sections below!
+# specify property name and value. See the Tips sections below!
 user = User().get_obj('username','komla') 
 
-#the 'key' attribute is the entity's datastore key
-user.key             
+# the 'key' attribute is the entity's datastore key
+entity_key = user.key    
+
+# get the entity's id or name
+name = user.key.id_or_name
+
+# get the entity's parent's key
+parent_key = user.key.parent
 
 ```
 
@@ -102,18 +108,19 @@ You can use a class to represent common properties/columns, then inherit it for 
 ```python
 class BaseModel(DatastoreEntity):
     date_created = DSEntityValue(datetime.datetime.utcnow())
-    created_by = DSEntityValue(None)
+    created_by = DSEntityValue('Admin')
     updated_by = DSEntityValue(None)
 
 class User(BaseModel):
     username = DSEntityValue(None)
+    password = DSEntityValue()
 
-    #...
+    # ...
 ```
 
 #### Retrieving Entity As Object
 Often, you'll have a property/column you use to fetch an entity (eg, username or email)
-Instead of always specifying the property/column and value using the provided ```get_obj()```, method, 
+Instead of always specifying the property/column AND value using the provided ```get_obj()``` method, 
 you can simplify this by wrapping your own method for your model around ```get_obj()```:
 ```python
 def get(self, value):
@@ -126,6 +133,6 @@ There might be operations you want to perform that are not available via the int
 To get a direct access to Datastore connection clients, use the ```get_client()``` method.
 ```python
 datastore_client = user.get_client()
-#... proceed with operation
+# ... proceed with operation
 
 ```
