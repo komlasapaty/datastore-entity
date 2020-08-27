@@ -34,11 +34,11 @@ from datastore_entity import DatastoreEntity, DSEntityValue
 class User(DatastoreEntity):
 
     username = DSEntityValue(None)  #specify a default value or provide no argument to imply 'None' value
-    password = DSEntityValue()
-    active = DSEntityValue(1)
-    date_created = DSEntityValue(datetime.datetime.utcnow()) #from datetime module
+    password = DSEntityValue()      #default of of 'None'
+    active = DSEntityValue(1)       #default value of 1
+    date_created = DSEntityValue(datetime.datetime.utcnow())
 
-    #specify the name of the entity kind. This is REQUIRED
+    #specify the name of the entity kind. This is REQUIRED. Raises ValueError otherwise
     __kind__ = "User"
 
     #optionally add properties to exclude from datastore indexes here

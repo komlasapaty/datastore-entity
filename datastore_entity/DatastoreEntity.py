@@ -12,16 +12,21 @@ class DatastoreEntity():
     
     It also provides useful operations while protecting the user from common mistakes.
 
-    Google Cloud Datastore is a key/value store that provides SQL-like functionalities(eg querying using a 'table' name)
-    A datastore entity belonging to a 'table'(a kind) can have varying column number, varying datatypes per columns.
+    Google Cloud Datastore is a NoSQL key/value store that provides SQL-like 
+    functionalities(eg querying using a 'table' name)
+    A datastore entity belonging to a 'table'(ie a kind) can have varying column number, 
+    varying datatypes per columns.
 
-    This base class helps you to specify your properties to avoid common mistakes while still allowing you to take full
-    advantage of the flexibility datastore provides.
+    This base class helps you to specify your properties to avoid common mistakes(misspelling property name) 
+    while still allowing you to take full advantage of the flexibility datastore provides.
 
     """
 
-    #A list of properties to exclude from datastore indexes
+    # A list of properties to exclude from datastore indexes
     __exclude_from_index__ = []
+
+    # name of entity kind
+    __kind__ = False
 
 
     def __init__(self,namespace=None,service_account_json_path=None):
@@ -41,6 +46,9 @@ class DatastoreEntity():
 
         #prepare the lookup table
         self._init_lookup()
+
+        if not self.__kind__:
+            raise ValueError("You must specify the entity 'kind' using __kind__")
 
 
     def _init_lookup(self,entity=None):
