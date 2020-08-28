@@ -5,7 +5,8 @@ Datastore Entity package provides a simple ORM-like(think SQL-Alchemy) interface
 "_Google Cloud Firestore in Datastore mode is a NoSQL document database built for automatic scaling, high performance, and ease of application development._"
 
 Datastore Entity allows you to represent your datastore entities using Python classes.
-You can then use familiar ORM patterns with popular packages like WTForms(eg. ```form.populate_obj(model)```) or Flask-Login(ie User model for authentication), to create, read, update and delete entities.
+You can then use familiar ORM patterns with popular packages like WTForms(eg. ```form.populate_obj(model)```) or 
+Flask-Login(ie ```User``` model for authentication), to create, read, update and delete entities.
 
 ## Documentation Link
 Coming soon...
@@ -32,12 +33,16 @@ from datastore_entity import DatastoreEntity, DSEntityValue
 
 class User(DatastoreEntity):
 
-    username = DSEntityValue(None)  # specify a default value of 'None'
-    password = DSEntityValue()      # or provide no argument to imply 'None'
-    active = DSEntityValue(1)       # default value of 1
+    # specify a default value of 'None'
+    username = DSEntityValue(None)
+    # or provide no argument to imply 'None'
+    password = DSEntityValue()
+    # default value of 1
+    active = DSEntityValue(1)
     date_created = DSEntityValue(datetime.datetime.utcnow())
 
-    # specify the name of the entity kind. This is REQUIRED. Raises ValueError otherwise
+    # specify the name of the entity kind. 
+    # This is REQUIRED. Raises ValueError otherwise
     __kind__ = "User"
 
     # optionally add properties to exclude from datastore indexes 
@@ -54,7 +59,8 @@ class User(DatastoreEntity):
 ```python
 # connect to the default datastore namespace. 
 user = User()  
-# After connecting, you can retrieve an entity as an object or populate attributes and save the entity
+# After connecting, you can retrieve an entity as an object 
+# or populate attributes and save the entity
 
 #connect to the 'custom' datastore namespace
 user = User('custom')  
