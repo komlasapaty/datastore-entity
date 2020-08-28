@@ -1,5 +1,8 @@
 """
-export GOOGLE_APPLICATION_CREDENTIALS="/code/auth/dev/datastore-and-storage-service-account.json"
+To connect to google cloud datastore service, set up the GOOGLE_APPLICATION_CREDENTIALS 
+environment variable with service account file
+Example:
+    export GOOGLE_APPLICATION_CREDENTIALS="/code/auth/dev/datastore-service-account.json"
 """
 import datetime
 import sys
@@ -33,7 +36,7 @@ class TestEntity:
 
     def test_missing_kind(self):
         """
-        When no __kind__ name is provided, raise a value error
+        When no __kind__ name is provided for a model class, raise a value error
         """
         with pytest.raises(ValueError):
             user_missing_kind = UserMissingKind()
@@ -45,3 +48,10 @@ class TestEntity:
         lookup_list = ['username','password','date_created']
         third_party = ThirdParty()
         assert sorted(lookup_list) == sorted(third_party.__datastore_properties_lookup__)
+    
+    def test_attr_dsentityvalue_instance(self):
+        """
+        Attribute must be an instance of DSEntityValue at initialization
+        """
+        user = ThirdParty()
+        assert isinstance(user.username, DSEntityValue)

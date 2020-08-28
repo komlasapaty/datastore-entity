@@ -2,9 +2,9 @@
 
 Datastore Entity package provides a simple ORM-like(think SQL-Alchemy) interface to [**Google Cloud**](https://cloud.google.com) NoSQL [**Datastore**](https://cloud.google.com/datastore/docs/datastore-api-tutorial#python)(Firestore in Datastore mode).
 
-Google Cloud Firestore in Datastore mode is a NoSQL document database built for automatic scaling, high performance, and ease of application development.
+"_Google Cloud Firestore in Datastore mode is a NoSQL document database built for automatic scaling, high performance, and ease of application development._"
 
-Datastore Entity package allows you to represent your datastore entities using Python classes.
+Datastore Entity allows you to represent your datastore entities using Python classes.
 You can then use familiar ORM patterns with popular packages like WTForms(eg. ```form.populate_obj(model)```) or Flask-Login(ie User model for authentication), to create, read, update and delete entities.
 
 ## Documentation Link
