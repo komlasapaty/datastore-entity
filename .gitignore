@@ -5,6 +5,7 @@ __pycache__/
 
 .tox
 .coverage
+.pytest_cache
 
 *.py[co]
 *.egg-info

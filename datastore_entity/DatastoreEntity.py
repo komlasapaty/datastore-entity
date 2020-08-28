@@ -74,12 +74,13 @@ class DatastoreEntity():
         """
         
         d = {}
-        for attr in self.__datastore_properties_lookup__:
-            value = getattr(self, attr)
-            if isinstance(value, DSEntityValue):
-                d[attr] = value.value
+        for attr_name in self.__datastore_properties_lookup__:
+            attr_value = getattr(self, attr_name)
+            if isinstance(attr_value, DSEntityValue):
+                d[attr_name] = attr_value.value
             else:
-                d[attr] = value #when obj is populated by say, WTForms, the instance will not be a DSEntityValue type
+                # when obj dynamically is populated(by say, WTForms), the instance will not be a DSEntityValue type
+                d[attr_name] = attr_value 
 
         return d
     
@@ -350,12 +351,12 @@ class DatastoreEntity():
             #_fields = self.__get_cls_fields()
             for entity in entities:
 
-                #for field in _fields:   
+                # for field in _fields:   
                 for k,v in entity.items(): #get all properties. note that properties may not be defined in the class
                     #setattr(self.__class__, k, entity.get(k, None))
                     setattr(self, k, v)
                 
-                #before we return the object, we set it's key(to be used in updates)
+                # before we return the object, we set it's key
                 self.key = entity.key
 
                 objs.append(self)
