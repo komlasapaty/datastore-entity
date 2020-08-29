@@ -8,7 +8,7 @@ Datastore Entity allows you to represent your datastore entities using Python cl
 You can then use familiar ORM patterns with popular packages like WTForms(eg. ```form.populate_obj(model)```) or 
 Flask-Login(ie ```User``` model for authentication), to create, read, update and delete entities.
 
-## Documentation Link
+## Documentation
 Find the [documentation](https://datastore-entity.readthedocs.io) here.
 
 ## Setup
