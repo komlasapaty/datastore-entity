@@ -11,7 +11,7 @@ Flask-Login(ie ```User``` model for authentication), to create, read, update and
 ## Documentation
 Find the [documentation](https://datastore-entity.readthedocs.io) here.
 
-## Setup
+# Quick Start
 As always, to connect to a Google Cloud Platform service from your local machine, you need to set up a service account key.
 Use the environment variable **GOOGLE_APPLICATION_CREDENTIALS** to point to the JSON file
 ```
