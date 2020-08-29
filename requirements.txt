@@ -1,4 +1,1 @@
 google-cloud-datastore>=1.3.0
-
-# convert an included markdown file in .rst file. required by readthedocs
-m2r2
