@@ -49,8 +49,11 @@ class User(DatastoreEntity):
     __exclude_from_index__ = ['password']
 
     # call the super class here
-    def __init__(self,namespace,service_account_json_path):
-        super(User,self).__init__(namespace, namespace)
+    def __init__(self,namespace, service_account_json_path, conn):
+        super(User, self).__init__(
+            namespace, 
+            service_account_json_path, 
+            conn)
 
     # other useful methods go here...
 ```
@@ -134,11 +137,17 @@ def get(self, value):
 ```
 Then you can grab your entity/object with ```user = User().get('komla')```
 
+#### Testing
+To initialize your model without connecting to datastore(eg. for the purposes of testing),
+pass in the ```conn``` argument as ```False```
+```python
+user = User(conn=False)
+```
+
 ## Notes ##
 There might be operations you want to perform that are not available via the interface provided.
 To get a direct access to Datastore connection client, use the ```get_client()``` method.
 ```python
 datastore_client = user.get_client()
 # ... proceed with operation
-
 ```

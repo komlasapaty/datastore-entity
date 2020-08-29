@@ -40,6 +40,9 @@ class DatastoreEntity():
     :param service_account_json_path: (Optional) path to service
                                       account file
     :type service_account_json_path: str
+
+    :param conn: wheter to connect when initializing model
+    :type conn: boolean
     """
 
     # A list of properties to exclude from datastore indexes
@@ -48,18 +51,21 @@ class DatastoreEntity():
     # name of entity kind
     __kind__ = False
 
-    def __init__(self, namespace=None, service_account_json_path=None):
-        if namespace and service_account_json_path:
-            self.ds_client = datastore.Client(
-                namespace=namespace).from_service_account_json(
+    def __init__(self, namespace=None, service_account_json_path=None, conn=True):
+        if conn:
+            if namespace and service_account_json_path:
+                self.ds_client = datastore.Client(
+                    namespace=namespace).from_service_account_json(
+                        service_account_json_path)
+            elif namespace:
+                self.ds_client = datastore.Client(namespace=namespace)
+            elif service_account_json_path:
+                self.ds_client = datastore.Client().from_service_account_json(
                     service_account_json_path)
-        elif namespace:
-            self.ds_client = datastore.Client(namespace=namespace)
-        elif service_account_json_path:
-            self.ds_client = datastore.Client().from_service_account_json(
-                service_account_json_path)
+            else:
+                self.ds_client = datastore.Client()
         else:
-            self.ds_client = datastore.Client()
+            self.ds_client = None
 
         self.key = None
 

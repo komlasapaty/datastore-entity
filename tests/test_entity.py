@@ -15,7 +15,7 @@ import pytest
 
 from datastore_entity import DatastoreEntity, DSEntityValue
 
-class UserMissingKind(DatastoreEntity):
+class ModelMissingKind(DatastoreEntity):
     username = DSEntityValue('foo')
     password = DSEntityValue(None)
     date_created = DSEntityValue(datetime.datetime.utcnow())
@@ -39,7 +39,7 @@ class TestEntity:
         When no __kind__ name is provided for a model class, raise a value error
         """
         with pytest.raises(ValueError):
-            user_missing_kind = UserMissingKind()
+            user_missing_kind = ModelMissingKind(conn=False)
     
     def test_attrs_not_polluted_from_third_party_classes(self):
         """
@@ -53,5 +53,5 @@ class TestEntity:
         """
         Attribute must be an instance of DSEntityValue at initialization
         """
-        user = ThirdParty()
+        user = ThirdParty(conn=False)
         assert isinstance(user.username, DSEntityValue)
