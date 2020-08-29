@@ -41,15 +41,17 @@ class DatastoreEntity():
                                       account file
     :type service_account_json_path: str
 
-    :param conn: wheter to connect when initializing model
+    :param conn: whether to connect when initializing model. 
+                 Useful for testing
     :type conn: boolean
     """
 
-    # A list of properties to exclude from datastore indexes
+    #: Required. Name of entity's kind.
+    __kind__ = False
+
+    #: Optional. A list of properties to exclude from datastore indexes. 
     __exclude_from_index__ = []
 
-    # name of entity kind
-    __kind__ = False
 
     def __init__(self, namespace=None, service_account_json_path=None, conn=True):
         if conn:
@@ -79,6 +81,8 @@ class DatastoreEntity():
             raise ValueError(
                 "You must specify the entity 'kind' using __kind__"
                 )
+    def __str__(self):
+        return f'<Entity Kind: {self.__kind__}>'
 
     def _init_lookup(self, entity=None):
         # once we initialize, we prepare the lookup list

@@ -1,32 +1,33 @@
 # Datastore Entity
 
-Datastore Entity package provides a simple ORM-like(think SQL-Alchemy) interface to [**Google Cloud**](https://cloud.google.com) NoSQL [**Datastore**](https://cloud.google.com/datastore/docs/datastore-api-tutorial#python) (Firestore in Datastore mode).
+Datastore Entity package provides a simple ORM-like (think SQL-Alchemy) interface to [Google Cloud](https://cloud.google.com) NoSQL 
+[Datastore](https://cloud.google.com/datastore/docs/datastore-api-tutorial#python) (Firestore in Datastore mode).
 
 "_Google Cloud Firestore in Datastore mode is a NoSQL document database built for automatic scaling, high performance, and ease of application development._"
 
-Datastore Entity allows you to represent your datastore entities using Python classes.
+Datastore Entity allows you to represent your entities using Python classes.
 You can then use familiar ORM patterns with popular packages like WTForms(eg. ```form.populate_obj(model)```) or 
 Flask-Login(ie ```User``` model for authentication), to create, read, update and delete entities.
 
 ## Documentation
-Find the [documentation](https://datastore-entity.readthedocs.io) here.
+[documentation](https://datastore-entity.readthedocs.io)
 
 # Quick Start
 As always, to connect to a Google Cloud Platform service from your local machine, you need to set up a service account key.
 Use the environment variable **GOOGLE_APPLICATION_CREDENTIALS** to point to the JSON file
-```
+```shell
 export GOOGLE_APPLICATION_CREDENTIALS="/code/auth/datastore-service-account.json"
 ```
 See below for another method of connecting by manually specifying the location of the service account JSON file.
 
 ## Installation
 Install the package using pip
-```
+```shell
 pip install datastore-entity
 ```
 
 # Usage Examples
-Some examples...
+Some examples ...
 ### Create A Model Class 
 ```python
 from datastore_entity import DatastoreEntity, DSEntityValue
