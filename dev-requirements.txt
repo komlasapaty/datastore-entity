@@ -5,6 +5,3 @@ sphinx
 
 # markdown support for sphinx
 # recommonmark
-
-# convert an included markdown file in .rst file
-m2r2
