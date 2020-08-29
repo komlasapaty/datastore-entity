@@ -1,10 +1,9 @@
+
+""" Base class for the entity model """
+
 from google.cloud import datastore
 
-
-class DSEntityValue:
-
-    def __init__(self, value=None):
-        self.value = value
+from .dsentityvalue import DSEntityValue
 
 
 class DatastoreEntity():
@@ -14,9 +13,6 @@ class DatastoreEntity():
     This gives you useful ORM features while
     interacting with the Datastore service.
 
-    It also provides useful operations while
-    protecting the user from common mistakes.
-
     Google Cloud Datastore is a NoSQL key/value
     store that provides SQL-like
     functionalities(eg querying using a 'table' name)
@@ -24,10 +20,26 @@ class DatastoreEntity():
     can have varying column number, varying
     datatypes per columns.
 
-    This base class helps you to specify your properties
-    to avoid common mistakes(misspelling property name)
+    This class also provides useful operations while
+    protecting the user from common mistakes.
+
+    It helps you to specify your properties in a way
+    that avoids common mistakes(eg. misspelling property name)
     while still allowing you to take full advantage of
     the flexibility datastore provides.
+
+    .. doctest::
+
+        >>> from datastore_entity import DatastoreEntity
+        >>> class User(DatastoreEntity):
+                # properties/attributes go here
+
+    :param namespace: (Optional) datastore namespace to connect to
+    :type namespace: str
+
+    :param service_account_json_path: (Optional) path to service
+                                      account file
+    :type service_account_json_path: str
     """
 
     # A list of properties to exclude from datastore indexes
@@ -95,9 +107,6 @@ class DatastoreEntity():
 
         return d
 
-    def get_props(self):
-        return self.__datastore_properties_lookup__
-
     def save(self, id=None, parent_or_ancestor=None,
              extra_props=None, excludes=None):
         """
@@ -106,23 +115,20 @@ class DatastoreEntity():
         Performs a new insert when 'id' is None
 
         :param id: the enfity identifier. part of an entity's key
-
-        :type id: int or string
+        :type id: int or str
 
         :param parent_or_ancestor: datastore key for entity's
-        parent or ancestor
-
+                                   parent or ancestor
         :type parent_or_ancestor: datastore key
 
         :param extra_data: an optional additional properties to add to
-        entity not defined in model class
-
+                           entity not defined in model class
         :type extra_data: dict
 
         :param exclude: a list of property names defined in the model
-        class when saving an entity
-
+                        class to exclude when saving an entity
         :type excludes: list
+
         """
         data = self._convert_to_dict()  # get the entity values as a dictionary
 
@@ -177,16 +183,22 @@ class DatastoreEntity():
     def get_client(self):
         """
         Return the datastore connection client
+
+        :return: dastore connection client
         """
 
         return self.ds_client
 
     def find_by_key(self, key):
         """
-        Performs a search for an entity using a it's
-        key(derived from the entity ID)
+        Performs a search for an entity using a it's key
+        Note that this returns the entity as-is, as 
+        opposed to returning it as a model instance
 
-        Returns a single entity or None
+        :param key: the datastore key
+        :type key: :class: google.cloud.datastore.key.Key
+
+        :return: entity or None
         """
         entity = self.ds_client.get(key)
 
@@ -195,6 +207,20 @@ class DatastoreEntity():
     def find_by_value(self, prop, val, comparator='=', limit=500):
         """
         Returns a list of entities meeting query requirements
+
+        :param prop: the entity property name
+        :type prop: str
+
+        :param val: the entity propery value
+        :type val: any
+
+        :param comparator: the query operator(=,=< etc)
+        :type comparator: str
+
+        :param limit: the number of entities to fetch
+        :type limit: int
+
+        :returns: a list of entity/entities
         """
         query = self.ds_client.query(kind=self.__kind__)
         query.add_filter(prop, comparator, val)
@@ -207,10 +233,10 @@ class DatastoreEntity():
         """
         Fetches entities using ancestor key
 
-        :param ancestor: datastore ancestor key
-        :type ancestor: datastore key
+        :param parent_or_ancestor: datastore ancestor key
+        :type parent_or_ancestor: :class: google.cloud.datastore.key.Key
         :param limit: number of entities to fetch. max of 500
-        :param limit: int
+        :type limit: int
 
         :return: a list of entity/entities
         """
@@ -320,7 +346,7 @@ class DatastoreEntity():
         :param path: a list with key path in the format ['kind','id',...]
         :type path: list
 
-        :return: Datastore Key
+        :return: :class: google.cloud.datastore.Key
         """
 
         key = self.ds_client.key(*path)
@@ -336,29 +362,25 @@ class DatastoreEntity():
         with the matching entity properties and values
 
         :param prop: the name of the entity property
-
         :type prop: str
 
         :param value: the name of the property value
-
         :type value: any. allowed datastore types
 
         :param limit: the maximum number of entities to return.
-         Datastore supports a maximum of 500
-
+                      Datastore supports a maximum of 500
         :type limit: int
 
         :paginate: whether to return a cursor to be used for pagination
-
         :type paginate: boolean
 
         :param cursor: the 'next' cursor to be used to fetch next set
-         of entities
-
+                       of entities
         :type cursor: str. representing a datastore cursor
 
-        :return: tuple. a two-element tuple. first element is a list of objects
-        and the second is the cursor for pagination or None
+        :return: tuple. a two-element tuple. first element is a list 
+                        of entity objects and the second is the cursor 
+                        for pagination or None
         """
         next_cursor = None
 

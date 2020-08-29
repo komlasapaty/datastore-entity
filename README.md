@@ -1,6 +1,6 @@
 # Datastore Entity
 
-Datastore Entity package provides a simple ORM-like(think SQL-Alchemy) interface to [**Google Cloud**](https://cloud.google.com) NoSQL [**Datastore**](https://cloud.google.com/datastore/docs/datastore-api-tutorial#python)(Firestore in Datastore mode).
+Datastore Entity package provides a simple ORM-like(think SQL-Alchemy) interface to [__Google Cloud__](https://cloud.google.com) NoSQL [__Datastore__](https://cloud.google.com/datastore/docs/datastore-api-tutorial#python) (Firestore in Datastore mode).
 
 "_Google Cloud Firestore in Datastore mode is a NoSQL document database built for automatic scaling, high performance, and ease of application development._"
 

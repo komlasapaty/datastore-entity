@@ -4,11 +4,11 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="datastore-entity-komlapypitest", # Replace with your own username
-    version="0.0.1",
+    name="datastore-entity",
+    version="0.1.0",
     author="Seyram Komla Sapaty",
     author_email="komlasapaty@gmail.com",
-    description="A simple ORM-like interface to Google Cloud NoSQL Firestore in Datastore mode",
+    description="A simple ORM-like interface to Google Cloud NoSQL Datastore",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/komlasapaty/datastore-entity",
