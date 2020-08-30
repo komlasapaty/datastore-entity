@@ -10,7 +10,7 @@ You can then use familiar ORM patterns with popular packages like WTForms(eg. ``
 Flask-Login(ie ```User``` model for authentication), to create, read, update and delete entities.
 
 ## Documentation
-[documentation](https://datastore-entity.readthedocs.io)
+[Datastore Entity documentation](https://datastore-entity.readthedocs.io)
 
 # Quick Start
 As always, to connect to a Google Cloud Platform service from your local machine, you need to set up a service account key.

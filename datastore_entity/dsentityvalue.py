@@ -8,8 +8,7 @@ class DSEntityValue:
 
     .. doctest::
 
-        >>> from datastore_entity import DatastoreEntity
-        >>> from datastore_entity import DSEntityValue
+        >>> from datastore_entity import DatastoreEntity, DSEntityValue
         >>> class User(DatastoreEntity):
                 username = DSEntityValue(None)
                 password = DSEntityValue(None)
