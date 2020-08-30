@@ -1,3 +1,4 @@
 -r ../requirements.txt
 # convert an included markdown file in .rst file. required by readthedocs
 m2r2
+sphinx==3.2.1
