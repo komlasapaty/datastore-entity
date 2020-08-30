@@ -8,4 +8,3 @@ API Reference
 
    datastore-entity
    entity-value
-
