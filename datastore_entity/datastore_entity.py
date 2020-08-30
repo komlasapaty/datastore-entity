@@ -3,8 +3,7 @@
 
 from google.cloud import datastore
 
-from .dsentityvalue import DSEntityValue
-
+from .entity_value import EntityValue
 
 class DatastoreEntity():
     """
@@ -81,8 +80,37 @@ class DatastoreEntity():
             raise ValueError(
                 "You must specify the entity 'kind' using __kind__"
                 )
-    def __str__(self):
-        return f'<Entity Kind: {self.__kind__}>'
+    
+    def connect(self, namespace=None, service_account_json_path=None):
+        """
+        Connect to datastore service.
+        Useful when model is initialized without connection or you want to 
+        connect to a different namespace or connect using a different credential
+
+        :param namespace: (Optional) datastore namespace to connect to
+        :type namespace: str
+
+        :param service_account_json_path: (Optional) path to service
+                                        account file
+        :type service_account_json_path: str
+
+        :return: boolean
+
+        """
+
+        if namespace and service_account_json_path:
+            self.ds_client = datastore.Client(
+                namespace=namespace).from_service_account_json(
+                    service_account_json_path)
+        elif namespace:
+            self.ds_client = datastore.Client(namespace=namespace)
+        elif service_account_json_path:
+            self.ds_client = datastore.Client().from_service_account_json(
+                service_account_json_path)
+        else:
+            self.ds_client = datastore.Client()
+        
+        return True
 
     def _init_lookup(self, entity=None):
         # once we initialize, we prepare the lookup list
@@ -95,7 +123,7 @@ class DatastoreEntity():
             for attr in attrs:
                 count += 1
                 value = getattr(self, attr)
-                if isinstance(value, DSEntityValue):
+                if isinstance(value, EntityValue):
                     self.__datastore_properties_lookup__.append(attr)
 
     def _convert_to_dict(self):
@@ -108,11 +136,11 @@ class DatastoreEntity():
         d = {}
         for attr_name in self.__datastore_properties_lookup__:
             attr_value = getattr(self, attr_name)
-            if isinstance(attr_value, DSEntityValue):
+            if isinstance(attr_value, EntityValue):
                 d[attr_name] = attr_value.value
             else:
                 # when obj dynamically is populated(by say, WTForms),
-                # the instance will not be a DSEntityValue type
+                # the instance will not be a EntityValue type
                 d[attr_name] = attr_value
 
         return d
@@ -138,6 +166,8 @@ class DatastoreEntity():
         :param exclude: a list of property names defined in the model
                         class to exclude when saving an entity
         :type excludes: list
+
+        :return: boolean
 
         """
         data = self._convert_to_dict()  # get the entity values as a dictionary
@@ -310,6 +340,7 @@ class DatastoreEntity():
     def get_obj_with_key(self, key):
         """
         Similar to get_obj(), but fetches entity using it's key
+        
         Retrieves an entity and populates the class attributes with
         the matching entity properties and values
 
@@ -345,6 +376,8 @@ class DatastoreEntity():
         """
         Deletes an entity
 
+        :return: boolean
+
         """
 
         self.ds_client.delete(self.key)
@@ -362,9 +395,6 @@ class DatastoreEntity():
         key = self.ds_client.key(*path)
 
         return key
-
-    def __repr__(self):
-        return f"<Kind: '{self.__kind__}' ==> {[attr for attr in self.__datastore_properties_lookup__]}>"
 
     def get_objects(self, prop, value, limit=500, paginate=False, cursor=None):
         """
@@ -422,3 +452,9 @@ class DatastoreEntity():
             return (objs, next_cursor)
         else:
             return None
+    
+    def __str__(self):
+        return f'<Entity Kind: {self.__kind__}>'
+
+    def __repr__(self):
+        return f"<Entity Kind: '{self.__kind__}' ==> {[attr for attr in self.__datastore_properties_lookup__]}>"

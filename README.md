@@ -30,17 +30,17 @@ pip install datastore-entity
 Some examples ...
 ### Create A Model Class 
 ```python
-from datastore_entity import DatastoreEntity, DSEntityValue
+from datastore_entity import DatastoreEntity, EntityValue
 
 class User(DatastoreEntity):
 
     # specify a default value of 'None'
-    username = DSEntityValue(None)
+    username = EntityValue(None)
     # or provide no argument to imply 'None'
-    password = DSEntityValue()
+    password = EntityValue()
     # default value of 1
-    active = DSEntityValue(1)
-    date_created = DSEntityValue(datetime.datetime.utcnow())
+    active = EntityValue(1)
+    date_created = EntityValue(datetime.datetime.utcnow())
 
     # specify the name of the entity kind. 
     # This is REQUIRED. Raises ValueError otherwise
@@ -116,14 +116,14 @@ parent_key = user.key.parent
 You can use a class to represent common properties/columns, then inherit it for your models
 ```python
 class BaseModel(DatastoreEntity):
-    date_created = DSEntityValue(datetime.datetime.utcnow())
-    created_by = DSEntityValue('Admin')
-    updated_by = DSEntityValue(None)
+    date_created = EntityValue(datetime.datetime.utcnow())
+    created_by = EntityValue('Admin')
+    updated_by = EntityValue(None)
 
 class User(BaseModel):
-    username = DSEntityValue(None)
-    password = DSEntityValue()
-    email = DSEntityValue(None)
+    username = EntityValue(None)
+    password = EntityValue()
+    email = EntityValue(None)
 
     # ...
 ```

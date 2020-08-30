@@ -7,5 +7,5 @@ API Reference
    :maxdepth: 2
 
    datastore-entity
-   dsentityvalue
+   entity-value
 

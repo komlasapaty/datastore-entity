@@ -1,2 +1,2 @@
 from . datastore_entity import DatastoreEntity
-from . dsentityvalue import DSEntityValue
+from . entity_value import EntityValue

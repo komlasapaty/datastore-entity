@@ -13,24 +13,28 @@ import sys
 import pytest
 #from flask_login import UserMixin
 
-from datastore_entity import DatastoreEntity, DSEntityValue
+from datastore_entity import DatastoreEntity, EntityValue
 
 class ModelMissingKind(DatastoreEntity):
-    username = DSEntityValue('foo')
-    password = DSEntityValue(None)
-    date_created = DSEntityValue(datetime.datetime.utcnow())
+    username = EntityValue('foo')
+    password = EntityValue(None)
+    date_created = EntityValue(datetime.datetime.utcnow())
 
 class UserMixin:
     is_active = True
 
 class ThirdParty(DatastoreEntity, UserMixin):
-    username = DSEntityValue('foo')
-    password = DSEntityValue(None)
-    date_created = DSEntityValue(datetime.datetime.utcnow())
+    username = EntityValue('foo')
+    password = EntityValue(None)
+    date_created = EntityValue(datetime.datetime.utcnow())
 
     __kind__ = 'user'
 
-#UserMissingKind()
+class Entity(DatastoreEntity):
+    updated_by = EntityValue(None)
+    created_by = EntityValue()
+
+    __kind__ = 'my_entity'
 
 class TestEntity:
 
@@ -51,7 +55,24 @@ class TestEntity:
     
     def test_attr_dsentityvalue_instance(self):
         """
-        Attribute must be an instance of DSEntityValue at initialization
+        Attribute must be an instance of EntityValue at initialization
         """
         user = ThirdParty(conn=False)
-        assert isinstance(user.username, DSEntityValue)
+        assert isinstance(user.username, EntityValue)
+    
+    def test_do_not_connect_when_conn_is_false(self):
+        """
+        Don't connect to datastore on model initialization when 'conn' argument
+        is False
+        """
+        entity = Entity(conn=False)
+        assert entity.get_client() is None
+    
+    def test_lazy_connection(self):
+        """
+        Connect to datastore using .connect()
+        """
+        entity = Entity(conn=False)
+        assert entity.connect() == True
+    
+
