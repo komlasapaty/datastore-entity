@@ -44,17 +44,14 @@ class User(DatastoreEntity):
 
     # specify the name of the entity kind. 
     # This is REQUIRED. Raises ValueError otherwise
-    __kind__ = "User"
+    __kind__ = "user"
 
     # optionally add properties to exclude from datastore indexes 
     __exclude_from_index__ = ['password']
 
     # call the super class here
-    def __init__(self,namespace, service_account_json_path, conn):
-        super(User, self).__init__(
-            namespace, 
-            service_account_json_path, 
-            conn)
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
 
     # other useful methods go here...
 ```
@@ -67,7 +64,7 @@ user = User()
 # or populate attributes and save the entity
 
 #connect to the 'custom' datastore namespace
-user = User('custom')  
+user = User(namespace='custom')  
 
 # connect using a service account JSON key (as opposed to using 
 # the environment variable GOOGLE_APPLICATION_CREDENTIALS)

@@ -20,6 +20,7 @@ class ModelMissingKind(DatastoreEntity):
     password = EntityValue(None)
     date_created = EntityValue(datetime.datetime.utcnow())
 
+#As thirdparty class
 class UserMixin:
     is_active = True
 
@@ -33,6 +34,7 @@ class ThirdParty(DatastoreEntity, UserMixin):
 class Entity(DatastoreEntity):
     updated_by = EntityValue(None)
     created_by = EntityValue()
+    extra_prop = "Extra"
 
     __kind__ = 'my_entity'
 
@@ -40,10 +42,18 @@ class TestEntity:
 
     def test_missing_kind(self):
         """
-        When no __kind__ name is provided for a model class, raise a value error
+        When no __kind__ name is provided for a model class, raise ValueError
         """
         with pytest.raises(ValueError):
             user_missing_kind = ModelMissingKind(conn=False)
+    
+    def test_attrs_declared_as_property_names_are_returned(self):
+        """
+        Ensure attributes marked as 'EntityValue' are the only ones in property lookup list
+        """
+        #lookup_list = ['username','password','date_created']
+        third_party = Entity(conn=False)
+        assert "extra_prop" not in third_party.__datastore_properties_lookup__
     
     def test_attrs_not_polluted_from_third_party_classes(self):
         """

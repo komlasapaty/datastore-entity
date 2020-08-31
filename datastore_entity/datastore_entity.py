@@ -5,6 +5,7 @@ from google.cloud import datastore
 
 from .entity_value import EntityValue
 
+
 class DatastoreEntity():
     """
     A base class representing a Google Cloud
@@ -40,19 +41,24 @@ class DatastoreEntity():
                                       account file
     :type service_account_json_path: str
 
-    :param conn: whether to connect when initializing model. 
-                 Useful for testing
+    :param conn: whether to connect when initializing model.
+                 Useful for testing or for deferring connection
     :type conn: boolean
+
+    :raises: :class: `ValueError` if ``__kind__`` is not provided
     """
 
     #: Required. Name of entity's kind.
     __kind__ = False
 
-    #: Optional. A list of properties to exclude from datastore indexes. 
+    #: Optional. A list of properties to exclude from datastore indexes.
     __exclude_from_index__ = []
 
-
-    def __init__(self, namespace=None, service_account_json_path=None, conn=True):
+    def __init__(self, **kwargs):
+        namespace = kwargs.get('namespace',None)
+        service_account_json_path = kwargs.get('service_account_json_path',None)
+        conn = kwargs.get('conn',True)
+        
         if conn:
             if namespace and service_account_json_path:
                 self.ds_client = datastore.Client(
@@ -80,12 +86,13 @@ class DatastoreEntity():
             raise ValueError(
                 "You must specify the entity 'kind' using __kind__"
                 )
-    
+
     def connect(self, namespace=None, service_account_json_path=None):
         """
         Connect to datastore service.
-        Useful when model is initialized without connection or you want to 
-        connect to a different namespace or connect using a different credential
+        Useful when model is initialized without connection or you want to
+        connect to a different namespace or connect using a different
+        credential
 
         :param namespace: (Optional) datastore namespace to connect to
         :type namespace: str
@@ -109,7 +116,7 @@ class DatastoreEntity():
                 service_account_json_path)
         else:
             self.ds_client = datastore.Client()
-        
+
         return True
 
     def _init_lookup(self, entity=None):
@@ -216,7 +223,15 @@ class DatastoreEntity():
         Calls Datastore's allocate_id() to allocate a list of
         datastore IDs that is guaranteed to be unique.
 
-        :returns: list of datastore keys
+        :param incomplete_key: A partial datastore key as base for
+                               allocated IDs
+        :type incomplete_key: :class: `google.cloud.datastore.key.Key`
+
+        :param num_ids: The number of IDs to allocate
+        :type num_ids: int
+
+        :returns: the complete key
+        :rtype: list of :class:`google.cloud.datastore.key.Key`
         """
         return self.ds_client.allocate_ids(incomplete_key, num_ids)
 
@@ -231,14 +246,19 @@ class DatastoreEntity():
 
     def find_by_key(self, key):
         """
-        Performs a search for an entity using a it's key
-        Note that this returns the entity as-is, as 
+        Performs a search for an entity using it's key
+
+        `Note:` This returns the entity as-is, as
         opposed to returning it as a model instance
 
-        :param key: the datastore key
+        To retrieve the entity as a model instance
+        use ``get_object_with_key() method``
+
+        :param key: The datastore key
         :type key: :class: google.cloud.datastore.key.Key
 
-        :return: entity or None
+        :return: The datastore entity
+        :rtype: :class: `google.cloud.datastore.entity.Entity`
         """
         entity = self.ds_client.get(key)
 
@@ -247,6 +267,12 @@ class DatastoreEntity():
     def find_by_value(self, prop, val, comparator='=', limit=500):
         """
         Returns a list of entities meeting query requirements
+
+        `Note:` This returns the entity as-is, as
+        opposed to returning it as a model instance
+
+        To retrieve the entity as a model instance
+        use ``get_objects() method`` which also supports pagination
 
         :param prop: the entity property name
         :type prop: str
@@ -260,7 +286,8 @@ class DatastoreEntity():
         :param limit: the number of entities to fetch
         :type limit: int
 
-        :returns: a list of entity/entities
+        :returns: one or more entities
+        :rtype: list
         """
         query = self.ds_client.query(kind=self.__kind__)
         query.add_filter(prop, comparator, val)
@@ -274,11 +301,13 @@ class DatastoreEntity():
         Fetches entities using ancestor key
 
         :param parent_or_ancestor: datastore ancestor key
-        :type parent_or_ancestor: :class: google.cloud.datastore.key.Key
+        :type parent_or_ancestor: :class: `google.cloud.datastore.key.Key`
+
         :param limit: number of entities to fetch. max of 500
         :type limit: int
 
-        :return: a list of entity/entities
+        :return: one or more entities
+        :rtype: list
         """
 
         query = self.ds_client.query(
@@ -339,8 +368,11 @@ class DatastoreEntity():
 
     def get_obj_with_key(self, key):
         """
-        Similar to get_obj(), but fetches entity using it's key
-        
+        Similar to get_obj(), but fetches entity using it's key.
+
+        Fetching an entity using a key is strongly consistent so object
+        is immediately available after saving it to datastore
+
         Retrieves an entity and populates the class attributes with
         the matching entity properties and values
 
@@ -348,6 +380,7 @@ class DatastoreEntity():
         :type key: datastore key
 
         :return: an object representing the entity
+        :rtype: :class: `datastore_entity.datastore_entity.DatastoreEntity`
         """
 
         entity = self.ds_client.get(key)
@@ -389,7 +422,8 @@ class DatastoreEntity():
         :param path: a list with key path in the format ['kind','id',...]
         :type path: list
 
-        :return: :class: google.cloud.datastore.Key
+        :return: the generated datastore key
+        :rtype: :class: google.cloud.datastore.key.Key
         """
 
         key = self.ds_client.key(*path)
@@ -418,9 +452,10 @@ class DatastoreEntity():
                        of entities
         :type cursor: str. representing a datastore cursor
 
-        :return: tuple. a two-element tuple. first element is a list 
-                        of entity objects and the second is the cursor 
+        :return: a two-element tuple. first element is a list
+                        of entity objects and the second is the cursor
                         for pagination or None
+        :rtype: tuple
         """
         next_cursor = None
 
@@ -452,9 +487,12 @@ class DatastoreEntity():
             return (objs, next_cursor)
         else:
             return None
-    
+
     def __str__(self):
         return f'<Entity Kind: {self.__kind__}>'
 
     def __repr__(self):
-        return f"<Entity Kind: '{self.__kind__}' ==> {[attr for attr in self.__datastore_properties_lookup__]}>"
+        return (
+            f"<Entity Kind: '{self.__kind__}' ==> "
+            f"{[attr for attr in self.__datastore_properties_lookup__]}>"
+                )

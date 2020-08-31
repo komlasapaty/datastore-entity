@@ -1,6 +1,7 @@
 
 """ Represents an entity value for a datastore entity's property """
 
+
 class EntityValue:
     """
     This class serves as a way to mark your model
@@ -10,8 +11,9 @@ class EntityValue:
 
         >>> from datastore_entity import DatastoreEntity, EntityValue
         >>> class User(DatastoreEntity):
-                username = EntityValue(None)
-                password = EntityValue(None)
+                username = EntityValue(None)  #default value of ``None``
+                password = EntityValue()  # implies ``None``
+                date_created = EntityValue(datetime.utcnow())
     """
 
     def __init__(self, value=None):
