@@ -1,4 +1,6 @@
 -r requirements.txt
+
+#requirements for documentation
 -r docs/requirements.txt
 
 pytest==6.0.1
