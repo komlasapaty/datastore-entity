@@ -146,8 +146,8 @@ class DatastoreEntity():
             if isinstance(attr_value, EntityValue):
                 d[attr_name] = attr_value.value
             else:
-                # when obj dynamically is populated(by say, WTForms),
-                # the instance will not be a EntityValue type
+                # when obj is dynamically populated(by say, WTForms),
+                # the instance will not be an EntityValue type
                 d[attr_name] = attr_value
 
         return d
