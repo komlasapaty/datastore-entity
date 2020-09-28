@@ -28,7 +28,7 @@ class DatastoreEntity():
     while still allowing you to take full advantage of
     the flexibility datastore provides.
 
-    See more examples here:
+    See more examples here:  
     https://www.aloudinthecloud.com/orm-patterns-with-google-cloud-firestore-in-datastore-mode.html
 
     .. doctest::
