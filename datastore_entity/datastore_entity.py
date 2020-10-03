@@ -242,7 +242,7 @@ class DatastoreEntity():
         """
         Return the datastore connection client
 
-        :return: dastore connection client
+        :return: datastore connection client
         """
 
         return self.ds_client
