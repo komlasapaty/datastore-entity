@@ -255,7 +255,7 @@ class DatastoreEntity():
         opposed to returning it as a model instance
 
         To retrieve the entity as a model instance
-        use ``get_object_with_key() method``
+        use ``get_obj_with_key() method``
 
         :param key: The datastore key
         :type key: :class: google.cloud.datastore.key.Key
