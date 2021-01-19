@@ -1,4 +1,3 @@
-
 """ Base class for the entity model """
 
 from google.cloud import datastore
