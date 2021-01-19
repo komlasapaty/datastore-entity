@@ -161,7 +161,7 @@ class DatastoreEntity():
 
         Performs a new insert when 'id' is None
 
-        :param id: the enfity identifier. part of an entity's key
+        :param id: the entity identifier. part of an entity's key
         :type id: int or str
 
         :param parent_or_ancestor: datastore key for entity's
