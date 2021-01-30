@@ -22,7 +22,8 @@ class ModelMissingKind(DatastoreEntity):
 class UserMixin:
     is_active = True
 
-class ThirdParty(DatastoreEntity, UserMixin):
+#Model using multiple inheritance(from a third party eg. Flask Login)
+class DBModel(DatastoreEntity, UserMixin):
     username = EntityValue('foo')
     password = EntityValue(None)
     date_created = EntityValue(datetime.datetime.utcnow())
@@ -58,14 +59,14 @@ class TestEntity:
         Attributes from other inherited classes should not pollute the lookup list for the model class
         """
         lookup_list = ['username','password','date_created']
-        third_party = ThirdParty()
+        third_party = DBModel()
         assert sorted(lookup_list) == sorted(third_party.__datastore_properties_lookup__)
     
     def test_attr_dsentityvalue_instance(self):
         """
         Attribute must be an instance of EntityValue at initialization
         """
-        user = ThirdParty(conn=False)
+        user = DBModel(conn=False)
         assert isinstance(user.username, EntityValue)
     
     def test_do_not_connect_when_conn_is_false(self):
