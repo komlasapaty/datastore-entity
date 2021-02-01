@@ -168,9 +168,9 @@ class DatastoreEntity():
                                    parent or ancestor
         :type parent_or_ancestor: datastore key
 
-        :param extra_data: an optional additional properties to add to
+        :param extra_props: an optional additional properties to add to
                            entity not defined in model class
-        :type extra_data: dict
+        :type extra_props: dict
 
         :param exclude: a list of property names defined in the model
                         class to exclude when saving an entity
