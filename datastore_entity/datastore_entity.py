@@ -168,9 +168,9 @@ class DatastoreEntity():
                                    parent or ancestor
         :type parent_or_ancestor: datastore key
 
-        :param extra_data: an optional additional properties to add to
+        :param extra_props: an optional additional properties to add to
                            entity not defined in model class
-        :type extra_data: dict
+        :type extra_props: dict
 
         :param exclude: a list of property names defined in the model
                         class to exclude when saving an entity
@@ -467,28 +467,23 @@ class DatastoreEntity():
         query_res = query.fetch(start_cursor=cursor, limit=limit)
 
         if paginate:
-            query_res = query.fetch(start_cursor=cursor, limit=limit)
             current_page = next(query_res.pages)
             entities = list(current_page)
             next_cursor = query_res.next_page_token.decode('utf-8')
         else:
-            entities = list(query.fetch(start_cursor=cursor, limit=limit))
+            entities = list(query_res)
 
-        if entities:
-            objs = []
-            for entity in entities:
+        objs = []
+        for entity in entities:
+            # get all properties. note that properties may not be
+            # defined in the class
+            for k, v in entity.items():
+                setattr(self, k, v)
 
-                # get all properties. note that properties may not be
-                # defined in the class
-                for k, v in entity.items():
-                    setattr(self, k, v)
+            self.key = entity.key
 
-                self.key = entity.key
-
-                objs.append(self)
-            return (objs, next_cursor)
-        else:
-            return None
+            objs.append(self)
+        return (objs, next_cursor)
 
     def __str__(self):
         return f'<Entity Kind: {self.__kind__}>'
