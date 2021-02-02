@@ -340,7 +340,7 @@ class DatastoreEntity():
         :param value: the value for the query
         :type value: int
 
-        :return: a class object represensenting the entity
+        :return: a class object representing the entity
         """
         query = self.ds_client.query(kind=self.__kind__)
         query.add_filter(prop, '=', value)
