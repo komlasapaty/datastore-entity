@@ -1,6 +1,6 @@
 """
 To connect to google cloud datastore service, set up the GOOGLE_APPLICATION_CREDENTIALS 
-environment variable with service account file
+environment variable with service account key file
 Example:
     export GOOGLE_APPLICATION_CREDENTIALS="/code/auth/dev/datastore-service-account.json"
 """
@@ -8,10 +8,8 @@ import datetime
 import sys
 
 #sys.path.append('/code/datastore-entity/datastore_entity')
-#print(sys.path)
 
 import pytest
-#from flask_login import UserMixin
 
 from datastore_entity import DatastoreEntity, EntityValue
 
