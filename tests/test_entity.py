@@ -7,11 +7,12 @@ Example:
 import datetime
 import sys
 
-#sys.path.append('/code/datastore-entity/datastore_entity')
-
 import pytest
 
+#python -m pytest tests
+
 from datastore_entity import DatastoreEntity, EntityValue
+
 
 class ModelMissingKind(DatastoreEntity):
     username = EntityValue('foo')
@@ -83,6 +84,15 @@ class TestEntity:
         """
         entity = Entity(conn=False)
         assert entity.connect() == True
+    
+    def test_dynamic_attrs_added_on_the_fly_are_used_as_entity_properties(self):
+        """
+        Attributes to be used as entity properties can be dynamically added after intitialization.
+        This allows for entity properties that are not part of model definition to be dynamically added.
+        """
+        entity = Entity(conn=False)
+        entity.attr_on_the_fly = EntityValue("Dynamic Value")
+        assert isinstance(entity.attr_on_the_fly, EntityValue)
     
 
 class TestEntityValue:

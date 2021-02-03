@@ -123,17 +123,20 @@ class DatastoreEntity():
 
     def _init_lookup(self, entity=None):
         # once we initialize, we prepare the lookup list
+
         if entity:  # when creating object with entity result
             for k, v in entity.items():
                 self.__datastore_properties_lookup__.append(k)
         else:
-            attrs = dir(self.__class__)
-            count = 0
+            #attrs = dir(self.__class__)
+            attrs = dir(self)
             for attr in attrs:
-                count += 1
                 value = getattr(self, attr)
-                if isinstance(value, EntityValue):
-                    self.__datastore_properties_lookup__.append(attr)
+                if (isinstance(value, EntityValue) and 
+                    attr not in self.__datastore_properties_lookup__):
+                        self.__datastore_properties_lookup__.append(attr)
+        
+        print(self.__datastore_properties_lookup__)
 
     def _convert_to_dict(self):
         """
@@ -142,6 +145,8 @@ class DatastoreEntity():
         returns a dictionary
         """
 
+        self._init_lookup() # collect any dynamic EntityValue attrs
+        
         d = {}
         for attr_name in self.__datastore_properties_lookup__:
             attr_value = getattr(self, attr_name)
@@ -179,6 +184,7 @@ class DatastoreEntity():
         :return: boolean
 
         """
+
         data = self._convert_to_dict()  # get the entity values as a dictionary
 
         # if the object has a key(ie called via .get_obj(), we will use it)
