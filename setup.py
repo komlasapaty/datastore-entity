@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="datastore-entity",
-    version="0.1.0",
+    version="0.2.0",
     author="Seyram Komla Sapaty",
     author_email="komlasapaty@gmail.com",
     description="A simple ORM-like interface to Google Cloud NoSQL Datastore",
