@@ -136,7 +136,7 @@ class DatastoreEntity():
                     attr not in self.__datastore_properties_lookup__):
                         self.__datastore_properties_lookup__.append(attr)
         
-        print(self.__datastore_properties_lookup__)
+        
 
     def _convert_to_dict(self):
         """
