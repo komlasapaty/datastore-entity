@@ -87,11 +87,12 @@ class TestEntity:
     
     def test_dynamic_attrs_added_on_the_fly_are_used_as_entity_properties(self):
         """
-        Attributes to be used as entity properties can be dynamically added after intitialization.
+        Attributes to be used as entity properties can be added after intitialization.
         This allows for entity properties that are not part of model definition to be dynamically added.
         """
         entity = Entity(conn=False)
         entity.attr_on_the_fly = EntityValue("Dynamic Value")
+        #assert 'attr_on_the_fly' in entity.__datastore_properties_lookup__
         assert isinstance(entity.attr_on_the_fly, EntityValue)
     
 
