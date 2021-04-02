@@ -1,5 +1,6 @@
 """
-To connect to google cloud datastore service, set up the GOOGLE_APPLICATION_CREDENTIALS 
+To connect to google cloud datastore service from your local
+machine, set up the GOOGLE_APPLICATION_CREDENTIALS 
 environment variable with service account key file
 Example:
     export GOOGLE_APPLICATION_CREDENTIALS="/code/auth/dev/datastore-service-account.json"
@@ -14,10 +15,15 @@ import pytest
 from datastore_entity import DatastoreEntity, EntityValue
 
 
-class ModelMissingKind(DatastoreEntity):
-    username = EntityValue('foo')
-    password = EntityValue(None)
-    date_created = EntityValue(datetime.datetime.utcnow())
+#Mock model
+class Entity(DatastoreEntity):
+    updated_by = EntityValue(None)
+    created_by = EntityValue()
+    
+    # Not an EntityValue
+    extra_prop = "Extra" 
+
+    __kind__ = 'my_entity'
 
 #As thirdparty class
 class UserMixin:
@@ -31,12 +37,13 @@ class DBModel(DatastoreEntity, UserMixin):
 
     __kind__ = 'user'
 
-class Entity(DatastoreEntity):
-    updated_by = EntityValue(None)
-    created_by = EntityValue()
-    extra_prop = "Extra"
 
-    __kind__ = 'my_entity'
+# Model missing a 'kind' name
+class ModelMissingKind(DatastoreEntity):
+    username = EntityValue('foo')
+    password = EntityValue(None)
+    date_created = EntityValue(datetime.datetime.utcnow())
+
 
 class TestEntity:
 
