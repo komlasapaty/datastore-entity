@@ -11,6 +11,7 @@ Flask-Login(ie ```User``` model for authentication), to create, read, update and
 
 ## Documentation
 [Datastore Entity documentation](https://datastore-entity.readthedocs.io)
+[Google's Python Client Library](https://googleapis.dev/python/datastore/latest/client.html)
 
 # Quick Start
 As always, to connect to a Google Cloud Platform service from your local machine, you need to set up a service account key.
