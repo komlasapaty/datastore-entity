@@ -10,7 +10,7 @@ You can then use familiar ORM patterns with popular packages like WTForms(eg. ``
 Flask-Login(ie ```User``` model for authentication), to create, read, update and delete entities.
 
 ## Documentation
-[Datastore Entity documentation](https://datastore-entity.readthedocs.io)
+[Datastore Entity documentation](https://datastore-entity.readthedocs.io)   
 [Google's Python Client Library](https://googleapis.dev/python/datastore/latest/client.html)
 
 # Quick Start
