@@ -136,8 +136,8 @@ def get(self, value):
 ```
 Then you can grab your entity/object with ```user = User().get('komla')```
 
-#### Dynamically Populating Additional Properties
-You can add additional properties to an instance of entity on the fly.  
+#### Populating Additional Properties Dynamically
+You can add additional properties to an instance of an entity on the fly.  
 Apart from using the `extra_props` dictionary as keyword argument to the `save()` method, you can create additional  
 entity properties with the following:
 ```
@@ -145,7 +145,7 @@ user = User()
 user.type = EntityValue(3) # assign attribute value as a type of EntityValue
 user.save()
 ```
-The specific instance of the entity will now have `type` as a property.
+The specific instance of the entity will now have `type` as a property with corresponding value.
 
 #### Testing
 To initialize your model without connecting to datastore(eg. for the purposes of testing),
