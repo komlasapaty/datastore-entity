@@ -69,7 +69,7 @@ class TestEntity:
         the lookup list for the model class
         """
         lookup_list = ['username', 'password', 'date_created']
-        third_party = DBModel()
+        third_party = DBModel(conn=False)
         assert sorted(lookup_list) == sorted(
             third_party.__datastore_properties_lookup__)
 
@@ -93,7 +93,7 @@ class TestEntity:
         Connect to datastore using .connect()
         """
         entity = Entity(conn=False)
-        assert entity.connect() == True
+        assert entity.connect() is True
 
     def test_dynamic_attrs_added_on_the_fly_are_used_as_entity_properties(self):
         """

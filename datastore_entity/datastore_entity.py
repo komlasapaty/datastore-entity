@@ -151,7 +151,7 @@ class DatastoreEntity():
         """
 
         self._init_lookup_list()
-        
+
         d = {}
         for attr_name in self.__datastore_properties_lookup__:
             attr_value = getattr(self, attr_name)
