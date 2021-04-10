@@ -27,7 +27,7 @@ class DatastoreEntity():
     while still allowing you to take full advantage of
     the flexibility datastore provides.
 
-    See more examples here:  
+    See more examples here:
     https://www.aloudinthecloud.com/orm-patterns-with-google-cloud-firestore-in-datastore-mode.html
 
     .. doctest::
@@ -57,9 +57,10 @@ class DatastoreEntity():
     __exclude_from_index__ = []
 
     def __init__(self, **kwargs):
-        namespace = kwargs.get('namespace',None)
-        service_account_json_path = kwargs.get('service_account_json_path',None)
-        conn = kwargs.get('conn',True)
+        namespace = kwargs.get('namespace', None)
+        service_account_json_path = kwargs.get(
+            'service_account_json_path', None)
+        conn = kwargs.get('conn', True)
         
         if conn:
             if namespace and service_account_json_path:
@@ -79,10 +80,10 @@ class DatastoreEntity():
         self.key = None
 
         # lookup for entity properties
-        self.__datastore_properties_lookup__ = []
+        # self.__datastore_properties_lookup__ = []
 
-        # prepare the lookup table
-        self._init_lookup()
+        # prepare the lookup list
+        self._init_lookup_list()
 
         if not self.__kind__:
             raise ValueError(
@@ -121,22 +122,26 @@ class DatastoreEntity():
 
         return True
 
-    def _init_lookup(self, entity=None):
-        # once we initialize, we prepare the lookup list
+    def _init_lookup_list(self, entity=None):
+        """
+        Retrieves object attributes that are used for
+
+        datastore properties and populates the lookup list
+        """
+
+        # we first reset the lookup list
+        self.__datastore_properties_lookup__ = []
 
         if entity:  # when creating object with entity result
             for k, v in entity.items():
                 self.__datastore_properties_lookup__.append(k)
         else:
-            #attrs = dir(self.__class__)
             attrs = dir(self)
             for attr in attrs:
                 value = getattr(self, attr)
-                if (isinstance(value, EntityValue) and 
+                if (isinstance(value, EntityValue) and
                     attr not in self.__datastore_properties_lookup__):
-                        self.__datastore_properties_lookup__.append(attr)
-        
-        
+                    self.__datastore_properties_lookup__.append(attr)
 
     def _convert_to_dict(self):
         """
@@ -145,7 +150,7 @@ class DatastoreEntity():
         returns a dictionary
         """
 
-        self._init_lookup() # collect any dynamic EntityValue attrs
+        self._init_lookup_list()
         
         d = {}
         for attr_name in self.__datastore_properties_lookup__:
@@ -187,7 +192,7 @@ class DatastoreEntity():
 
         data = self._convert_to_dict()  # get the entity values as a dictionary
 
-        # if the object has a key(ie called via .get_obj(), we will use it)
+        # if the object has a key(ie called via .get_obj(), we will use that)
         if self.key:
             key = self.key
         elif id and parent_or_ancestor:
@@ -352,7 +357,7 @@ class DatastoreEntity():
         query.add_filter(prop, '=', value)
 
         # reset the lookup list
-        self.__datastore_properties_lookup__ = []
+        # self.__datastore_properties_lookup__ = []
 
         entities = list(query.fetch(limit=1))
         if entities:
@@ -366,7 +371,7 @@ class DatastoreEntity():
                 setattr(self, k, v)
 
             # prepare the lookup list using the entity property names retrieved
-            self._init_lookup(entity)
+            self._init_lookup_list(entity)
             # we set the entity's key
             self.key = entity.key
 
@@ -394,7 +399,7 @@ class DatastoreEntity():
         entity = self.ds_client.get(key)
 
         # reset the lookup list
-        self.__datastore_properties_lookup__ = []
+        # self.__datastore_properties_lookup__ = []
 
         if entity:
             # get all properties. note that some properties may not be
@@ -403,7 +408,7 @@ class DatastoreEntity():
                 setattr(self, k, v)
 
             # prepare the lookup list
-            self._init_lookup(entity)
+            self._init_lookup_list(entity)
 
             # before we return the object, we set it's
             # key(to be used in updates)
