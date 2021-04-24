@@ -33,8 +33,10 @@ class DatastoreEntity():
     .. doctest::
 
         >>> from datastore_entity import DatastoreEntity
-        >>> class User(DatastoreEntity):
-                # properties/attributes go here
+        >>> class User(DatastoreEntity): #doctest: +ELLIPSIS
+        ...    pass
+        ...    # properties/attributes go here
+        ...
 
     :param namespace: (Optional) datastore namespace to connect to
     :type namespace: str
